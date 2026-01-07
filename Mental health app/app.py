@@ -163,7 +163,7 @@ def mental_health_recommender(user_input):
         }
 
     except Exception as e:
-        # FAIL-SAFE RETURN (VERY IMPORTANT)
+       
         return {
             "note": "We couldn't fully process the input, showing general guidance.",
             "similar_conditions": [],
@@ -206,4 +206,5 @@ if submit and user_condition.strip() != "":
     st.warning(
         "⚠️ This system is for educational purposes only and does not diagnose or prescribe medication."
     )
+
 

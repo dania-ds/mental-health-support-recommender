@@ -5,18 +5,14 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from collections import Counter
 
-# -----------------------------
-# Page Config
-# -----------------------------
+
 st.set_page_config(
     page_title="Mental Health Support System",
     page_icon="🧠",
     layout="centered"
 )
 
-# -----------------------------
-# Custom CSS (UI Polish)
-# -----------------------------
+
 st.markdown("""
 <style>
     .stButton>button {
@@ -31,16 +27,12 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# -----------------------------
-# Title
-# -----------------------------
+
 st.markdown("<h1 style='text-align:center;'>🧠 Mental Health Support System</h1>", unsafe_allow_html=True)
 st.markdown("<p style='text-align:center;'>Awareness-based, safe & explainable mental health guidance</p>", unsafe_allow_html=True)
 st.divider()
 
-# -----------------------------
-# Load Dataset
-# -----------------------------
+
 @st.cache_data
 def load_data():
     df = pd.read_csv("drugs_side_effects_drugs_com.csv")
@@ -49,9 +41,7 @@ def load_data():
 
 df = load_data()
 
-# -----------------------------
-# Filter Mental Health Data
-# -----------------------------
+
 mental_keywords = [
     "depression", "anxiety", "bipolar", "panic",
     "schizophrenia", "adhd", "insomnia"
@@ -63,16 +53,12 @@ mental_df = df[
 
 mental_df['medical_condition'] = mental_df['medical_condition'].str.lower()
 mental_df = mental_df.reset_index(drop=True)
-# -----------------------------
-# NLP: Condition Similarity
-# -----------------------------
+
 vectorizer = CountVectorizer(stop_words='english')
 condition_vectors = vectorizer.fit_transform(mental_df['medical_condition'])
 similarity_matrix = cosine_similarity(condition_vectors)
 
-# -----------------------------
-# Helper Functions
-# -----------------------------
+
 def condition_exists(condition):
     return condition in mental_df['medical_condition'].values
 
@@ -111,9 +97,6 @@ def get_common_side_effects(condition, top_n=5):
     return [e[0].strip() for e in common]
 
 
-# -----------------------------
-# Simplified Treatment Categories
-# -----------------------------
 category_mapping = {
     "selective serotonin reuptake inhibitors": 
         "Take such Antidepressants that helps improve your mood and reduce anxiety by increasing serotonin in your brain)",
@@ -158,9 +141,7 @@ def get_treatment_categories(condition):
 
     return list(simplified)
 
-# -----------------------------
-# Main Recommender
-# -----------------------------
+
 def mental_health_recommender(user_input):
     try:
         user_input = str(user_input).lower().strip()
@@ -192,18 +173,14 @@ def mental_health_recommender(user_input):
 
 
 
-# -----------------------------
-# Sidebar Input
-# -----------------------------
+
 st.sidebar.header("📝 MENTAL CONDITION ")
 user_condition = st.sidebar.text_input(
     "Enter your concern (e.g. stress, anxiety, depression)"
 )
 submit = st.sidebar.button("Get Support 💙")
 
-# -----------------------------
-# Output Section
-# -----------------------------
+
 if submit and user_condition.strip() != "":
     result = mental_health_recommender(user_condition)
 
@@ -229,3 +206,4 @@ if submit and user_condition.strip() != "":
     st.warning(
         "⚠️ This system is for educational purposes only and does not diagnose or prescribe medication."
     )
+
